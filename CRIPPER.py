@@ -1,23 +1,30 @@
 from os import walk
 from datetime import datetime
+import sys
 import sqlite3
+import xml.etree.ElementTree as ET
 
-# We need to get a base directory to begin or search from.
-# Since we are going to be using this in house we will always
-# be using the same directory to begin and thus it is hard
-# coded. In the future the program could be updated to handle
-# tracking of multiple directories (each would need its own DB
-# or a new key field in the run_history table to tell what
-# starting directory was used for splitting the data set
-# during comparisons).
+# extract the data from the config file
+config_data = ET.parse("config.xml")
+root = config_data.getroot()
 
-# Should be converted to use a config file for the path and DB
+# declare our base path and database file path variables
+base_path = ""
+database_file = ""
 
-# Base directory for our home use
-base_path = "\\FREENAS\NAS"
+# from the root of the xml, get the setting values we need
+for child in root:
+  if child.tag == "base_dir":
+    base_path = child.text
+  elif child.tag == "database_file":
+    database_file = child.text
 
-# open a connection to our database file
-conn = sqlite3.connect("data\cripper.db")
+# make sure the db file and base path were both found
+if len(base_path) == 0 or len(database_file) == 0:
+  sys.exit("Unable to load config file. Closing")
+
+# connect to the database file
+conn = sqlite3.connect(database_file)
 
 # get cursor
 c = conn.cursor()

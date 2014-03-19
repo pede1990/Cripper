@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <base_dir>\\FREENAS\NAS</base_dir>
+  <database_file>data\cripper.db</database_file>
+</settings>

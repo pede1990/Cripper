@@ -1,7 +1,7 @@
 import sqlite3
 
 # create a connection to the sqlite3 database file
-conn = sqlite3.connect("example.db")
+conn = sqlite3.connect("cripper.db")
 
 # script string to create the run history table
 createRunTableString = "CREATE TABLE run_history (run_id integer, run_date_time text)"

@@ -11,31 +11,38 @@ import sqlite3
 # starting directory was used for splitting the data set
 # during comparisons).
 
+# Should be converted to use a config file for the path and DB
+
 # Base directory for our home use
-base_path = "//FREE-NAS/NAS/"
+base_path = "\\FREENAS\NAS"
 
 # open a connection to our database file
-conn = sqlite3.connect("data/example.db")
+conn = sqlite3.connect("data\cripper.db")
 
 # get cursor
 c = conn.cursor()
 
 # get the run_id we will be using
-c.execute("SELECT * FROM run_history")
+c.execute("select ifnull(count(run_id), 0) as count from run_history;")
 
 # last used run id
-run_id = c.rowcount()
+run_id = c.fetchone()
 
 # increment run_id to the next available
-if run_id = -1
-run_id = run_id + 1
+if run_id[0] == 0:
+  run_id = 1
+else:
+  run_id = run_id[0] + 1
 
 # get the date time string formatted for this entry
 date_time = datetime.now()
 
 # insert a record in the run history table
-c.execute("INSERT INTO run_history (run_id, run_date_time) VALUES (%d, %s)" % run_id, date_time)
+c.execute("insert into run_history (run_id, run_date_time) values ({0}, '{1}');".format(str(run_id), date_time))
 
-for root, dirs, files in walk(base_dir):
+for root, dirs, files in walk(base_path):
   for file in files:
-    c.execute("INSERT INTO files (run_id, file_name, file_path) VALUES (%d, '%s', '%s')" % run_id, file, root)
+    c.execute("insert into file (run_id, file_name, file_path) values ({0}, '{1}', '{2}');".format(run_id, str(file), str(root)))
+
+conn.commit()
+conn.close()

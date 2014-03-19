@@ -38,7 +38,7 @@ else:
 date_time = datetime.now()
 
 # insert a record in the run history table
-c.execute("insert into run_history (run_id, run_date_time) values ({0}, '{1}');".format(str(run_id), date_time))
+c.execute("insert into run_history (run_id, run_date_time, base_path) values ({0}, '{1}', '{2}');".format(str(run_id), date_time, base_path))
 
 for root, dirs, files in walk(base_path):
   for file in files:

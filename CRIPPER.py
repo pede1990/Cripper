@@ -30,7 +30,7 @@ conn = sqlite3.connect(database_file)
 c = conn.cursor()
 
 # get the run_id we will be using
-c.execute("select ifnull(count(run_id), 0) as count from run_history;")
+c.execute("select ifnull(max(run_id), 0) as count from run_history;")
 
 # last used run id
 run_id = c.fetchone()
